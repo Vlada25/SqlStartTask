@@ -13,7 +13,7 @@ AS
 		SET @totalCardBalance = 
 			(SELECT SUM(CardBalance)
 			FROM Cards
-			JOIN Accounts ON Accounts.Id = Cards.AccountId
+			JOIN Accounts ON Accounts.AccountNumber = Cards.AccountNumber
 			WHERE AccountName = @accountName)
 
 		SET @accountBalance = 
@@ -28,7 +28,7 @@ AS
 				SET CardBalance = CardBalance + @moneyCount
 				FROM 
 					(SELECT CardNumber FROM Cards
-					JOIN Accounts ON Accounts.Id = Cards.AccountId
+					JOIN Accounts ON Accounts.AccountNumber = Cards.AccountNumber
 					WHERE AccountName = @accountName AND CardNumber = @cardNumber) 
 					AS SelectedCard
 				WHERE Cards.CardNumber = SelectedCard.CardNumber
@@ -45,7 +45,7 @@ AS
 		Accounts.Balance,
 		CardBalance
 	FROM Accounts
-	JOIN Cards ON Cards.AccountId = Accounts.Id
+	JOIN Cards ON Cards.AccountNumber = Accounts.AccountNumber
 	WHERE AccountName = @accountName AND CardNumber = @cardNumber
 
 BEGIN TRY

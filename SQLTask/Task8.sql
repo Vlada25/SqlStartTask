@@ -11,7 +11,7 @@ AS
 		SET @isBalanceCorrect = 
 			(SELECT  SUM(Cards.CardBalance)
 			FROM Cards
-			JOIN Accounts ON Accounts.Id = Cards.AccountId
+			JOIN Accounts ON Accounts.AccountNumber = Cards.AccountNumber
 			GROUP BY AccountName
 			HAVING AVG(Accounts.Balance) < SUM(Cards.CardBalance))
 
@@ -30,7 +30,7 @@ AS
 		SET @isBalanceCorrect = 
 			(SELECT  SUM(Cards.CardBalance)
 			FROM Cards
-			JOIN Accounts ON Accounts.Id = Cards.AccountId
+			JOIN Accounts ON Accounts.AccountNumber = Cards.AccountNumber
 			GROUP BY AccountName
 			HAVING AVG(Accounts.Balance) < SUM(Cards.CardBalance))
 
@@ -50,5 +50,5 @@ SELECT AccountName,
 	AVG(Accounts.Balance) AS AccountBalance,
 	SUM(Cards.CardBalance) AS TotalCardBalance
 FROM Accounts
-JOIN Cards ON Cards.AccountId = Accounts.Id
+JOIN Cards ON Cards.AccountNumber = Accounts.AccountNumber
 GROUP BY AccountName

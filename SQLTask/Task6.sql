@@ -17,5 +17,5 @@ FROM (SELECT Clients.FullName,
 	GROUP BY Clients.FullName) AS TotalBalance
 FULL OUTER JOIN Clients ON Clients.FullName = TotalBalance.FullName
 FULL OUTER JOIN Accounts ON Accounts.ClientId = Clients.Id
-FULL OUTER JOIN Cards ON Cards.AccountId = Accounts.Id
+FULL OUTER JOIN Cards ON Cards.AccountNumber = Accounts.AccountNumber
 GROUP BY Clients.FullName
