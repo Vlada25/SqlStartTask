@@ -36,7 +36,7 @@ AS
 	END;
 
 GO
-CREATE PROCEDURE ViewTableForTask7
+CREATE PROCEDURE View7
 	@accountName VARCHAR(30),
 	@cardNumber VARCHAR(19)
 AS
@@ -58,9 +58,9 @@ SET @account = 'aladka03'
 SET @card = '5145 8536 2280 2525'
 SET @money = 10
 
-EXEC ViewTableForTask7 @account, @card
+EXEC View7 @account, @card
 EXEC TransferMoney @account, @card, @money
-EXEC ViewTableForTask7 @account, @card
+EXEC View7 @account, @card
 
 END TRY
 	BEGIN CATCH

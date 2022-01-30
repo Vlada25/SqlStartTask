@@ -2,14 +2,8 @@ USE DB_Bank
 
 SELECT Clients.FullName,
 	AVG(TotalBalance.SumBalance) AS FullBalance,
-	IIF(SUM(Cards.CardBalance) IS NULL, 
-		0, 
-		SUM(Cards.CardBalance))
-	 AS CardsSum,
-	IIF(SUM(Cards.CardBalance) IS NULL, 
-		AVG(TotalBalance.SumBalance), 
-		AVG(TotalBalance.SumBalance) - SUM(Cards.CardBalance))
-	 AS AvailableMoney
+	COALESCE(SUM(Cards.CardBalance), 0) AS CardsSum,
+	COALESCE(AVG(TotalBalance.SumBalance) - SUM(Cards.CardBalance), AVG(TotalBalance.SumBalance)) AS AvailableMoney
 FROM (SELECT Clients.FullName, 
 		SUM(Accounts.Balance) AS SumBalance
 	FROM Clients
@@ -18,4 +12,4 @@ FROM (SELECT Clients.FullName,
 FULL OUTER JOIN Clients ON Clients.FullName = TotalBalance.FullName
 FULL OUTER JOIN Accounts ON Accounts.ClientId = Clients.Id
 FULL OUTER JOIN Cards ON Cards.AccountNumber = Accounts.AccountNumber
-GROUP BY Clients.FullName
+GROUP BY Clients.Id, Clients.FullName

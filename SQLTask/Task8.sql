@@ -12,7 +12,7 @@ AS
 			(SELECT  SUM(Cards.CardBalance)
 			FROM Cards
 			JOIN Accounts ON Accounts.AccountNumber = Cards.AccountNumber
-			GROUP BY AccountName
+			GROUP BY Accounts.AccountNumber
 			HAVING AVG(Accounts.Balance) < SUM(Cards.CardBalance))
 
 		IF @isBalanceCorrect IS NOT NULL
@@ -31,7 +31,7 @@ AS
 			(SELECT  SUM(Cards.CardBalance)
 			FROM Cards
 			JOIN Accounts ON Accounts.AccountNumber = Cards.AccountNumber
-			GROUP BY AccountName
+			GROUP BY Accounts.AccountNumber
 			HAVING AVG(Accounts.Balance) < SUM(Cards.CardBalance))
 
 		IF @isBalanceCorrect IS NOT NULL
@@ -51,4 +51,4 @@ SELECT AccountName,
 	SUM(Cards.CardBalance) AS TotalCardBalance
 FROM Accounts
 JOIN Cards ON Cards.AccountNumber = Accounts.AccountNumber
-GROUP BY AccountName
+GROUP BY Accounts.AccountNumber, AccountName
