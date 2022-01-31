@@ -6,7 +6,9 @@ CREATE PROCEDURE TransferMoney
 	@cardNumber VARCHAR(19),
 	@moneyCount MONEY
 AS
-	BEGIN
+	BEGIN TRY
+	BEGIN TRANSACTION
+
 		DECLARE @totalCardBalance MONEY, 
 			@accountBalance MONEY
 
@@ -33,7 +35,17 @@ AS
 					AS SelectedCard
 				WHERE Cards.CardNumber = SelectedCard.CardNumber
 			END;
-	END;
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION
+
+		SELECT ERROR_NUMBER() AS ErrorNumber,
+			ERROR_MESSAGE() AS ErrorMessage
+
+		RETURN
+	END CATCH
+
+	COMMIT TRANSACTION
 
 GO
 CREATE PROCEDURE View7
@@ -48,8 +60,6 @@ AS
 	JOIN Cards ON Cards.AccountNumber = Accounts.AccountNumber
 	WHERE AccountName = @accountName AND CardNumber = @cardNumber
 
-BEGIN TRY
-BEGIN TRANSACTION
 
 DECLARE @account VARCHAR(30), @card VARCHAR(19)
 DECLARE @money MONEY
@@ -62,14 +72,3 @@ EXEC View7 @account, @card
 EXEC TransferMoney @account, @card, @money
 EXEC View7 @account, @card
 
-END TRY
-	BEGIN CATCH
-		ROLLBACK TRANSACTION
-
-		SELECT ERROR_NUMBER() AS ErrorNumber,
-			ERROR_MESSAGE() AS ErrorMessage
-
-		RETURN
-	END CATCH
-
-COMMIT TRANSACTION
