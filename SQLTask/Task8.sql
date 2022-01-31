@@ -5,18 +5,15 @@ CREATE TRIGGER TR_Accounts_ChangeBalance
 ON Accounts
 AFTER INSERT, UPDATE
 AS
+	IF Exists
+		(SELECT  SUM(Cards.CardBalance)
+		FROM Cards
+		JOIN Accounts ON Accounts.AccountNumber = Cards.AccountNumber
+		GROUP BY Accounts.AccountNumber
+		HAVING AVG(Accounts.Balance) < SUM(Cards.CardBalance)) 
 	BEGIN
-		DECLARE @isBalanceCorrect MONEY
-
-		SET @isBalanceCorrect = 
-			(SELECT  SUM(Cards.CardBalance)
-			FROM Cards
-			JOIN Accounts ON Accounts.AccountNumber = Cards.AccountNumber
-			GROUP BY Accounts.AccountNumber
-			HAVING AVG(Accounts.Balance) < SUM(Cards.CardBalance))
-
-		IF @isBalanceCorrect IS NOT NULL
-			ROLLBACK TRANSACTION
+		PRINT 'The account balance should not be less than the amount of the cards balance'
+		ROLLBACK TRANSACTION
 	END;
 
 GO
@@ -24,22 +21,19 @@ CREATE TRIGGER TR_Cards_ChangeBalance
 ON Cards
 AFTER INSERT, UPDATE
 AS
+	IF Exists
+		(SELECT  SUM(Cards.CardBalance)
+		FROM Cards
+		JOIN Accounts ON Accounts.AccountNumber = Cards.AccountNumber
+		GROUP BY Accounts.AccountNumber
+		HAVING AVG(Accounts.Balance) < SUM(Cards.CardBalance))
 	BEGIN
-		DECLARE @isBalanceCorrect MONEY
-
-		SET @isBalanceCorrect = 
-			(SELECT  SUM(Cards.CardBalance)
-			FROM Cards
-			JOIN Accounts ON Accounts.AccountNumber = Cards.AccountNumber
-			GROUP BY Accounts.AccountNumber
-			HAVING AVG(Accounts.Balance) < SUM(Cards.CardBalance))
-
-		IF @isBalanceCorrect IS NOT NULL
-			ROLLBACK TRANSACTION
+		PRINT 'The amount of the cards balance should not be more than the account balance'
+		ROLLBACK TRANSACTION
 	END;
 
 UPDATE Accounts
-SET Accounts.Balance = 3000
+SET Accounts.Balance = 30000
 WHERE AccountName = 'aladka03'
 
 UPDATE Cards
