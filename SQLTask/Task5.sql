@@ -15,7 +15,7 @@ AS
 	WHERE Accounts.AccountName = SelectedAccount.AccountName
 
 GO
-CREATE PROCEDURE View5 AS
+CREATE VIEW View5 AS
 	SELECT Accounts.AccountName, 
 		Clients.FullName, 
 		SocialStatuses.StatusName, 
@@ -28,6 +28,6 @@ DECLARE @status VARCHAR(50)
 
 SET @status = 'Pensioner'
 
-EXEC View5
+SELECT * FROM View5
 EXEC AddMoney @status
-EXEC View5
+SELECT * FROM View5
