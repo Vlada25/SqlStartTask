@@ -8,7 +8,7 @@ AS
 	IF Exists
 		(SELECT  SUM(Cards.CardBalance)
 		FROM Cards
-		JOIN Accounts ON Accounts.AccountNumber = Cards.AccountNumber
+			JOIN Accounts ON Accounts.AccountNumber = Cards.AccountNumber
 		GROUP BY Accounts.AccountNumber
 		HAVING AVG(Accounts.Balance) < SUM(Cards.CardBalance)) 
 	BEGIN
@@ -24,7 +24,7 @@ AS
 	IF Exists
 		(SELECT  SUM(Cards.CardBalance)
 		FROM Cards
-		JOIN Accounts ON Accounts.AccountNumber = Cards.AccountNumber
+			JOIN Accounts ON Accounts.AccountNumber = Cards.AccountNumber
 		GROUP BY Accounts.AccountNumber
 		HAVING AVG(Accounts.Balance) < SUM(Cards.CardBalance))
 	BEGIN
@@ -44,5 +44,5 @@ SELECT AccountName,
 	AVG(Accounts.Balance) AS AccountBalance,
 	SUM(Cards.CardBalance) AS TotalCardBalance
 FROM Accounts
-JOIN Cards ON Cards.AccountNumber = Accounts.AccountNumber
+	JOIN Cards ON Cards.AccountNumber = Accounts.AccountNumber
 GROUP BY Accounts.AccountNumber, AccountName

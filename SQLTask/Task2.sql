@@ -5,5 +5,5 @@ SELECT CardNumber,
 	Banks.BankName, 
 	Accounts.Balance
 FROM Cards
-JOIN Accounts ON Accounts.AccountNumber = Cards.AccountNumber
-JOIN Banks ON Accounts.BankId = Banks.Id
+	JOIN Accounts ON Accounts.AccountNumber = Cards.AccountNumber
+	JOIN Banks ON Accounts.BankId = Banks.Id
